@@ -31,18 +31,18 @@ public class Connexion {
             e.printStackTrace();
         }       
     }
-    //Fonction renvoyant si l'utilisateur existe et s'il est admin en fonction de son id et de son mdp
+    /* Fonction renvoyant si l'utilisateur existe et s'il est admin en fonction de son id et de son mdp */
     public boolean[] authentification(String id, String mdp){
         boolean resultatAuthentification[]= new boolean[2];
-        resultatAuthentification[0]=false;
-        resultatAuthentification[1]=false;
+        resultatAuthentification[0]=false;// l'indice 0 contiendera le booléen affirmant de la validité des identifiants
+        resultatAuthentification[1]=false;// l'indice 1 contiendera le booléen lié au status d'admin
         try {
             Statement state                 = conn.createStatement();
-            ResultSet result                = state.executeQuery("SELECT * FROM utilisateurs");       
-            while (result.next()){
-                if(id.compareTo(result.getString("identifiant"))==0 && mdp.compareTo(result.getString("mot_de_passe"))==0) {
+            ResultSet result                = state.executeQuery("SELECT * FROM utilisateurs");  // Récupération des données dans la base de donnée     
+            while (result.next()){ // Lecture des données
+                if(id.compareTo(result.getString("identifiant"))==0 && mdp.compareTo(result.getString("mot_de_passe"))==0) { // On vérifie si les identifiants existent
                     resultatAuthentification[0]=true;
-                    if(result.getInt("admin") == 1 )
+                    if(result.getInt("admin") == 1 ) // On vérifie si l'user est admin ou non
                     {
                         resultatAuthentification[1] = true;
                     }
@@ -56,6 +56,7 @@ public class Connexion {
         }            
         return resultatAuthentification;
     }
+    /* Méthode permettant l'ajout d'un nouvel utilisateur */
     public void addUtilisateur(int id,String login,String mdp){
         try {
             String query = "INSERT INTO utilisateurs (`id_intermittent`,`identifiant`,`mot_de_passe`,`admin`) VALUES ("+ id +",'"+ login +"','"+ mdp +"',0)";
@@ -65,6 +66,7 @@ public class Connexion {
             e.printStackTrace();
         }
     }
+    /* Méthode permettant la modification du mot de passe */
     public void setMotDePasse(String mdp,int id){
         try {
             String query = "UPDATE `utilisateurs` SET `mot_de_passe` ='"+ mdp +"' WHERE `id_intermittent` ="+id;

@@ -18,6 +18,7 @@ import nezdames.serialisation.*;
  * @author julien
  */
 public class Authentification extends javax.swing.JFrame {
+    /* variable permettant de verifier le status, user(false) ou admin(true) */
     public static boolean privilege = false;
     /**
      * Creates new form authentification
@@ -103,18 +104,21 @@ public class Authentification extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        /* Paramètre de connexion à la base de données via jdbc */
         String url                      = "jdbc:mysql://localhost:3306/nezdames";
         String user                     = "root";
         String passwd                   = "zouzou93";        
-        Connexion a = new Connexion();
+        Connexion conn1 = new Connexion();
         boolean authentification[] = new boolean[2];
-        authentification = a.authentification(idTxt.getText(),motDePasseTxt.getText());
-            if(authentification[0]){
-                if(authentification[1]){
+        /* On appel la méthode authentification de la classe connexion qui permet de verifier si les logins sont correctes et le status de l'utilisateur  */
+        authentification = conn1.authentification(idTxt.getText(),motDePasseTxt.getText());
+            if(authentification[0]){//Vérifie si les login sont correcte
+                if(authentification[1]){//Vérifie le status
                     privilege = true;
                 }else {
                     privilege = false;
                 }
+                /* Les logins étant vérifié on donne l'accès au menu principal */
                 MenuPrincipal monMenuPrincipal  = new MenuPrincipal();
                 monMenuPrincipal.setVisible(true);                    
                 this.dispose();
